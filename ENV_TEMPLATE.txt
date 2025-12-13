@@ -1,0 +1,45 @@
+# ===========================================
+# MONGODB CONFIGURATION
+# ===========================================
+# Get this from MongoDB Atlas: https://cloud.mongodb.com
+# Or use local MongoDB: mongodb://localhost:27017/college-election
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/college-election?retryWrites=true&w=majority
+
+# ===========================================
+# ADMIN CREDENTIALS (Multiple Counters Support)
+# ===========================================
+# You can add multiple admin emails for different counters
+# Each counter admin will see the SAME current PIN (auto-rotating)
+
+# Counter 1 Admin
+ADMIN_EMAIL=counter1@college.edu
+ADMIN_PASSWORD=SecurePassword1!
+
+# Counter 2 Admin (optional - add more as needed)
+# ADMIN_EMAIL_2=counter2@college.edu
+# ADMIN_PASSWORD_2=SecurePassword2!
+
+# Counter 3 Admin (optional)
+# ADMIN_EMAIL_3=counter3@college.edu
+# ADMIN_PASSWORD_3=SecurePassword3!
+
+# Counter 4 Admin (optional)
+# ADMIN_EMAIL_4=counter4@college.edu
+# ADMIN_PASSWORD_4=SecurePassword4!
+
+# Note: Currently, the system supports one admin email.
+# To add multiple admins, you can modify the login route to check multiple emails.
+
+# ===========================================
+# ENVIRONMENT
+# ===========================================
+NODE_ENV=development
+
+# ===========================================
+# SERVER CONFIGURATION
+# ===========================================
+# Port (Next.js default is 3000)
+PORT=3000
+
+# Next.js specific - API URL for client-side requests
+NEXT_PUBLIC_API_URL=http://localhost:3000

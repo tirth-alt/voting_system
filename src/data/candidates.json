@@ -1,0 +1,178 @@
+{
+    "malePresident": [
+        {
+            "id": "mp1",
+            "name": "Manan Agrawal",
+            "tagline": "Leading with Vision",
+            "photo": "mp1.jpg"
+        },
+        {
+            "id": "mp2",
+            "name": "Ashmit Kumar Nayak",
+            "tagline": "Your Voice, My Mission",
+            "photo": "mp2.jpg"
+        }
+    ],
+    "femalePresident": [
+        {
+            "id": "fp1",
+            "name": "Anushka Jain",
+            "tagline": "Empowering Every Student",
+            "photo": "fp1.jpg"
+        },
+        {
+            "id": "fp2",
+            "name": "Pooja Talele",
+            "tagline": "Change Starts Here",
+            "photo": "fp2.jpg"
+        }
+    ],
+    "academicSecretary": [
+        {
+            "id": "as1",
+            "name": "Arjun Kshirsagar ",
+            "tagline": "Excellence in Education",
+            "photo": "as1.jpg"
+        },
+        {
+            "id": "as2",
+            "name": "Sourashis Sarkar",
+            "tagline": "Learning Without Limits",
+            "photo": "as2.jpg"
+        },
+        {
+            "id": "as3",
+            "name": "Pujan Khunt",
+            "tagline": "Knowledge is Power",
+            "photo": "as3.jpg"
+        }
+    ],
+    "sportsSecretary": [
+        {
+            "id": "ss1",
+            "name": "Piyush Kumar",
+            "tagline": "Play Hard, Win Big",
+            "photo": "ss1.jpg"
+        },
+        {
+            "id": "ss2",
+            "name": "Naman Kajla ",
+            "tagline": "Sports for Everyone",
+            "photo": "ss2.jpg"
+        },
+        {
+            "id": "ss3",
+            "name": "Shrimay Somani",
+            "tagline": "Beyond the Game",
+            "photo": "ss3.jpg"
+        }
+    ],
+    "culturalSecretary": [
+        {
+            "id": "cs1",
+            "name": "Suswetha",
+            "tagline": "Celebrate Our Culture",
+            "photo": "cs1.jpg"
+        },
+        {
+            "id": "cs2",
+            "name": "Kohantika Nath",
+            "tagline": "Art Meets Heart",
+            "photo": "cs2.jpg"
+        }
+    ],
+    "campusAffairsSecretary": [
+        {
+            "id": "cas1",
+            "name": "Archisman Midya",
+            "tagline": "Campus First",
+            "photo": "cas1.jpg"
+        },
+        {
+            "id": "cas2",
+            "name": "Vanditabyaa Dwivedi",
+            "tagline": "Your Campus, Your Way",
+            "photo": "cas2.jpg"
+        }
+    ],
+    "leoCaptain": [
+        {
+            "id": "lc1",
+            "name": "Aditya Nayak",
+            "tagline": "Roar to Victory",
+            "photo": "lc1.jpg"
+        },
+        {
+            "id": "lc2",
+            "name": "AyushKumar Singh",
+            "tagline": "Pride of Leo",
+            "photo": "lc2.jpg"
+        },
+        {
+            "id": "lc3",
+            "name": "Nilabh Shejwalkar",
+            "tagline": "Lead the Pack",
+            "photo": "lc3.jpg"
+        }
+    ],
+    "phoenixCaptain": [
+        {
+            "id": "pc1",
+            "name": "Javin Arora",
+            "tagline": "Rise from Ashes",
+            "photo": "pc1.jpg"
+        },
+        {
+            "id": "pc2",
+            "name": "[TEMP]",
+            "tagline": "Phoenix Fire",
+            "photo": "pc2.jpg"
+        }
+    ],
+    "tuskerCaptain": [
+        {
+            "id": "tc1",
+            "name": "Krishna Bhatia",
+            "tagline": "Strength & Wisdom",
+            "photo": "tc1.jpg"
+        },
+        {
+            "id": "tc2",
+            "name": "Vedika Kataria",
+            "tagline": "Tusker Power",
+            "photo": "tc2.jpg"
+        },
+        {
+            "id": "tc3",
+            "name": "Harman Singh",
+            "tagline": "Mighty Tusker",
+            "photo": "tc3.jpg"
+        },
+        {
+            "id": "tc4",
+            "name": "Dhairya Lakhmani",
+            "tagline": "Stand Strong",
+            "photo": "tvc1.jpg"
+        }
+    ],
+    "kongCaptain": [
+        {
+            "id": "kc1",
+            "name": "Akshara Jain",
+            "tagline": "King of the Jungle",
+            "photo": "kc1.jpg"
+        },
+        {
+            "id": "kc2",
+            "name": "Ashna Adeel Siddiqui",
+            "tagline": "Kong Conquers",
+            "photo": "kc2.jpg"
+        },
+        {
+            "id": "kc3",
+            "name": "Ashmit Raj",
+            "tagline": "Supreme Strength",
+            "photo": "kc3.jpg"
+        }
+    ]
+}
