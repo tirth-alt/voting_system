@@ -242,7 +242,7 @@ export default function VotingPage() {
       {currentPage === 'pin' && (
         <main className="main-content">
           <div className="pin-page">
-            <Image src="/assets/logo/logosst.png" alt="SST" width={80} height={80} className="center-logo" />
+            <Image src="/assets/logo/logosst.png" alt="SST" width={150} height={80} className="center-logo" />
             <h1 className="main-title">
               Student<br />
               Election <span className="gradient-text">2026</span>
@@ -395,7 +395,7 @@ export default function VotingPage() {
                   >
                     {(isPref1 || isPref2) && (
                       <span className={`pref-badge ${isPref1 ? 'p1' : 'p2'}`}>
-                        {isPref1 ? '1' : '2'}
+                        {isPref1 ? '1st preference' : '2nd preference'}
                       </span>
                     )}
 
@@ -440,7 +440,7 @@ export default function VotingPage() {
             {/* Navigation */}
             <div className="nav-buttons">
               <button
-                className="btn-secondary"
+                className="btn-primary"
                 onClick={goToPreviousPosition}
                 disabled={currentPositionIndex === 0}
                 style={{ padding: '14px 32px', fontSize: '1rem' }}
@@ -851,7 +851,8 @@ export default function VotingPage() {
         
         .candidate-card {
           width: 160px;
-          padding: 24px 16px;
+          height: 250px;
+          padding: 30px 16px;
           background: #141414;
           border: 2px solid #222;
           border-radius: 16px;
@@ -881,19 +882,19 @@ export default function VotingPage() {
           background: rgba(13, 148, 136, 0.08);
         }
         
-        .pref-badge {
-          position: absolute;
-          top: -10px;
-          right: -10px;
-          width: 28px;
-          height: 28px;
-          border-radius: 50%;
+        .pref-badge {;
+          top: -8px;
+          right: 0px;
+          width: 200px;
+          height: 40px;
+          border-radius: 5%;
           font-size: 0.85rem;
           font-weight: 700;
           display: flex;
           align-items: center;
           justify-content: center;
           color: #fff;
+          position: absolute;
         }
         
         .pref-badge.p1 {
