@@ -2,11 +2,12 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Candidate from '@/models/Candidate';
 import Vote from '@/models/Vote';
+import Config from '@/models/Config';
 import { requireDean } from '@/lib/adminAuth';
 
 /**
  * POST /api/admin/reset-all
- * Reset all votes and candidate counts (Dean-only - destructive action)
+ * Reset all votes, configs, and candidate counts (Dean-only - destructive action)
  */
 export async function POST(request) {
     try {
@@ -27,22 +28,28 @@ export async function POST(request) {
         await connectDB();
 
         // Delete all votes
-        const deleteResult = await Vote.deleteMany({});
+        const deleteVotesResult = await Vote.deleteMany({});
+
+        // Delete all configs (resets encryption, voting status, PIN, etc.)
+        const deleteConfigsResult = await Config.deleteMany({});
 
         // Reset all candidate counts to zero
         await Candidate.updateMany({}, {
-            pref1_count: 0,
-            pref2_count: 0,
-            total_points: 0
+            $set: {
+                pref1_count: 0,
+                pref2_count: 0,
+                total_points: 0
+            }
         });
 
         const identifier = auth.user?.email || auth.session?.email || 'dean';
-        console.log(`[ADMIN] ⚠️ ALL VOTES RESET by ${identifier}. Deleted ${deleteResult.deletedCount} votes.`);
+        console.log(`[ADMIN] ⚠️ FULL ELECTION RESET by ${identifier}. Deleted ${deleteVotesResult.deletedCount} votes, ${deleteConfigsResult.deletedCount} configs.`);
 
         return NextResponse.json({
             success: true,
-            message: `Reset complete. Deleted ${deleteResult.deletedCount} votes.`,
-            deletedVotes: deleteResult.deletedCount
+            message: `Full reset complete. Deleted ${deleteVotesResult.deletedCount} votes, ${deleteConfigsResult.deletedCount} configs. Candidate counts reset to zero.`,
+            deletedVotes: deleteVotesResult.deletedCount,
+            deletedConfigs: deleteConfigsResult.deletedCount
         });
 
     } catch (error) {
