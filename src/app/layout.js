@@ -1,11 +1,12 @@
 import { Inter } from 'next/font/google';
 import "./globals.css";
+import AuthProvider from '@/components/AuthProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: "Student Elections 2026 - SST College",
-  description: "College Election Voting System - Cast your vote securely",
+  title: 'College Election Voting System',
+  description: 'A secure voting system for college elections',
 };
 
 export default function RootLayout({ children }) {
@@ -19,7 +20,9 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href="/css/pages.css" />
       </head>
       <body className={inter.className}>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

@@ -10,14 +10,15 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "next": "16.0.10",
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
-    "mongoose": "^9.0.1",
     "bcrypt": "^6.0.0",
-    "express-session": "^1.18.2",
     "connect-mongo": "^6.0.0",
-    "json2csv": "^6.0.0-alpha.2"
+    "express-session": "^1.18.2",
+    "json2csv": "^6.0.0-alpha.2",
+    "mongoose": "^9.0.1",
+    "next": "16.0.10",
+    "next-auth": "^4.24.13",
+    "react": "19.2.1",
+    "react-dom": "19.2.1"
   },
   "devDependencies": {
     "eslint": "^9",

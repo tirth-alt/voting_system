@@ -6,6 +6,21 @@
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/college-election?retryWrites=true&w=majority
 
 # ===========================================
+# VOTING BOOTH PINS (6-digit)
+# ===========================================
+# Each voting booth has its own 6-digit PIN
+# This separates different physical voting counters
+# Students enter this BEFORE the voting PIN
+
+NEXT_PUBLIC_BOOTH_1_PIN=111111
+NEXT_PUBLIC_BOOTH_2_PIN=222222
+NEXT_PUBLIC_BOOTH_3_PIN=333333
+NEXT_PUBLIC_BOOTH_4_PIN=444444
+
+# Note: NEXT_PUBLIC_ prefix makes these available in the browser
+# Change these to secure 6-digit numbers before deployment
+
+# ===========================================
 # ADMIN CREDENTIALS (Multiple Counters Support)
 # ===========================================
 # You can add multiple admin emails for different counters
@@ -43,3 +58,4 @@ PORT=3000
 
 # Next.js specific - API URL for client-side requests
 NEXT_PUBLIC_API_URL=http://localhost:3000
+

@@ -1,15 +1,15 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Vote from '@/models/Vote';
-import { requireAdmin } from '@/lib/adminAuth';
+import { requireCommission } from '@/lib/adminAuth';
 
 /**
  * GET /api/admin/votes
- * Get vote statistics
+ * Get vote statistics (accessible by Commission and Dean)
  */
 export async function GET() {
     try {
-        const auth = await requireAdmin();
+        const auth = await requireCommission();
         if (!auth.authenticated) {
             return NextResponse.json({ error: auth.error }, { status: 401 });
         }

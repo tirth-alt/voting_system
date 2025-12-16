@@ -1,8 +1,7 @@
 /* ===================================
-   CSS VARIABLES & THEME
+   CSS VARIABLES & THEME (RESTORED)
    =================================== */
 :root {
-  /* Colors */
   --bg-primary: #0a0a0a;
   --bg-secondary: #111111;
   --bg-card: #1a1a1a;
@@ -12,50 +11,41 @@
   --text-secondary: #a0a0a0;
   --text-muted: #666666;
 
-  --accent-cyan: #00f0ff;
+  --accent-cyan: #2dd4ff;
+  --accent-blue: #60a5fa;
   --accent-purple: #bf5fff;
   --accent-green: #00ff88;
   --accent-red: #ff4466;
 
-  /* Gradients for houses */
-  --gradient-leo: linear-gradient(135deg, #ffd700, #ff6600);
-  --gradient-phoenix: linear-gradient(135deg, #ff4444, #990033);
-  --gradient-tusker: linear-gradient(135deg, #22c55e, #15803d);
-  /* Green */
-  --gradient-kong: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  /* Blue */
+  /* Glow system */
+  --glow-cyan: 0 0 18px rgba(45, 212, 255, .45), 0 0 36px rgba(45, 212, 255, .25);
+  --glow-green: 0 0 18px rgba(0, 255, 136, .45);
+  --glow-red: 0 0 15px rgba(255, 68, 102, .4);
 
-  /* Neon glows */
-  --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.5), 0 0 40px rgba(0, 240, 255, 0.3);
-  --glow-purple: 0 0 15px rgba(191, 95, 255, 0.4), 0 0 30px rgba(191, 95, 255, 0.2);
-  --glow-green: 0 0 20px rgba(0, 255, 136, 0.5);
-  --glow-red: 0 0 15px rgba(255, 68, 102, 0.4);
-
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
+  /* Spacing scale */
+  --spacing-xs: .25rem;
+  --spacing-sm: .5rem;
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
   --spacing-xxl: 3rem;
 
-  /* Border radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  /* Radius */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 999px;
 
   /* Transitions */
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
   --transition-slow: 400ms ease;
 
-  /* Typography */
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* ===================================
-   RESET & BASE STYLES
+   RESET
    =================================== */
 *,
 *::before,
@@ -67,373 +57,156 @@
 
 html {
   font-size: 16px;
-  scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-family);
-  background-color: var(--bg-primary);
+  background: var(--bg-primary);
   color: var(--text-primary);
-  line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Film grain overlay */
+/* ===================================
+   CINEMATIC VIGNETTE
+   =================================== */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center,
+      rgba(0, 0, 0, 0) 45%,
+      rgba(0, 0, 0, .65) 100%);
+  z-index: 5;
+}
+
+/* ===================================
+   GRAIN OVERLAY
+   =================================== */
 .grain-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
-  z-index: 1000;
-  opacity: 0.04;
+  z-index: 999;
+  opacity: 0.05;
   background-image:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
 /* ===================================
    LAYOUT
    =================================== */
 .app-container {
-  position: relative;
   min-height: 100vh;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--spacing-md);
-}
-
-.page {
-  display: none;
-  opacity: 0;
-  transition: opacity var(--transition-normal);
-}
-
-.page.active {
-  display: block;
-  opacity: 1;
-  animation: fadeIn var(--transition-slow) ease;
-}
-
-.page-content {
-  padding: var(--spacing-lg) 0;
 }
 
 .page-content.centered {
+  min-height: 100vh;
+  padding: 80px 16px 120px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 120px);
   text-align: center;
-  padding-top: 60px;
-  padding-bottom: 60px;
 }
 
 /* ===================================
-   SITE HEADER
+   FLOATING ADMIN BUTTON
    =================================== */
-.site-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: linear-gradient(to bottom, var(--bg-primary) 0%, transparent 100%);
-  z-index: 100;
-}
-
-.site-logo {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
-.site-logo img {
-  height: 40px;
-  width: auto;
-  filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.3));
-  display: none;
-  /* Hidden by default on PIN page, shown via JS on other pages */
-}
-
 .btn-admin-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: var(--radius-md);
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  font-weight: 500;
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 50;
+
+  padding: .6rem 1.2rem;
+  font-size: .9rem;
+  color: var(--text-primary);
   text-decoration: none;
+
+  background: rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(14px);
+
   transition: all var(--transition-normal);
-  backdrop-filter: blur(8px);
 }
 
 .btn-admin-link:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--accent-cyan);
-  color: var(--text-primary);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+  background: rgba(255, 255, 255, .16);
+  box-shadow: var(--glow-cyan);
+  transform: translateY(-2px);
 }
 
 /* ===================================
-   SITE FOOTER
+   BRANDING
    =================================== */
-.site-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: center;
-  padding: var(--spacing-md);
-  background: linear-gradient(to top, var(--bg-primary) 0%, transparent 100%);
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  z-index: 100;
+.logo-section {
+  margin-bottom: var(--spacing-xxl);
 }
 
-.site-footer .heart {
-  color: #ff4466;
-  animation: heartbeat 1.5s ease infinite;
+.scaler-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  justify-content: center;
 }
 
-@keyframes heartbeat {
-
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.15);
-  }
+.shield-icon {
+  width: 60px;
+  height: 60px;
+  filter: drop-shadow(0 0 20px rgba(45, 212, 255, .35));
 }
 
-.site-footer a {
+.scaler-name {
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+.scaler-subtitle {
+  font-size: .7rem;
   color: var(--text-secondary);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-
-.site-footer a:hover {
-  color: var(--accent-cyan);
 }
 
 /* ===================================
-   LOGO IMAGE IN HERO
-   =================================== */
-.logo-image {
-  width: 150px;
-  height: auto;
-  margin-bottom: var(--spacing-md);
-  animation: float 3s ease-in-out infinite;
-  filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.4));
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ===================================
-   TYPOGRAPHY
+   MAIN TITLE
    =================================== */
 .main-title {
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin-bottom: var(--spacing-xl);
+  font-size: clamp(2.8rem, 7vw, 4.8rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  margin-bottom: var(--spacing-xxl);
 }
 
 .main-title .accent {
   background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.section-title {
-  font-size: clamp(1.5rem, 5vw, 2rem);
-  font-weight: 600;
-  margin-bottom: var(--spacing-md);
-}
-
-.position-title {
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 600;
-  margin-bottom: var(--spacing-sm);
 }
 
 /* ===================================
-   BUTTONS
+   FOOTER
    =================================== */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 500;
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  text-decoration: none;
-}
-
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent-cyan), #0088aa);
-  color: var(--bg-primary);
-  box-shadow: var(--glow-cyan);
-}
-
-.btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(0, 240, 255, 0.6), 0 0 60px rgba(0, 240, 255, 0.4);
-}
-
-.btn-secondary {
-  background: var(--bg-card);
-  color: var(--text-primary);
-  border: 1px solid var(--text-muted);
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background: var(--bg-card-hover);
-  border-color: var(--text-secondary);
-}
-
-.btn-danger {
-  background: transparent;
-  color: var(--accent-red);
-  border: 1px solid var(--accent-red);
-}
-
-.btn-danger:hover:not(:disabled) {
-  background: rgba(255, 68, 102, 0.1);
-  box-shadow: var(--glow-red);
-}
-
-.btn-large {
-  padding: var(--spacing-lg) var(--spacing-xxl);
-  font-size: 1.125rem;
-}
-
-.btn-arrow {
-  font-size: 1.25em;
-  transition: transform var(--transition-fast);
-}
-
-.btn:hover .btn-arrow {
-  transform: translateX(3px);
-}
-
-.btn-secondary:hover .btn-arrow {
-  transform: translateX(-3px);
-}
-
-/* ===================================
-   LOADING OVERLAY
-   =================================== */
-.loading-overlay {
+.site-footer {
   position: fixed;
-  top: 0;
+  bottom: 16px;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(10, 10, 10, 0.9);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-lg);
-  z-index: 900;
-  backdrop-filter: blur(4px);
+  right: 0;
+  text-align: center;
+  font-size: .8rem;
+  color: var(--text-muted);
+  z-index: 10;
 }
 
-.loading-overlay.hidden {
-  display: none;
-}
-
-.spinner {
-  width: 48px;
-  height: 48px;
-  border: 3px solid var(--bg-card);
-  border-top-color: var(--accent-cyan);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* ===================================
-   ERROR MESSAGE
-   =================================== */
-.error-message {
+.site-footer .heart {
   color: var(--accent-red);
-  font-size: 0.875rem;
-  min-height: 1.5em;
-  margin: var(--spacing-sm) 0;
+  animation: heartbeat 1.5s ease infinite;
 }
 
-/* ===================================
-   RESPONSIVE UTILITIES
-   =================================== */
-@media (max-width: 768px) {
-  .app-container {
-    padding: var(--spacing-sm);
+@keyframes heartbeat {
+  50% {
+    transform: scale(1.15);
   }
-
-  .page-content {
-    padding: var(--spacing-md) 0;
-  }
-}
-
-/* ===================================
-   ACCESSIBILITY
-   =================================== */
-:focus-visible {
-  outline: 2px solid var(--accent-cyan);
-  outline-offset: 2px;
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
 }

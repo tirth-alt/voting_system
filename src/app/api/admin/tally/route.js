@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Candidate from '@/models/Candidate';
-import { requireAdmin } from '@/lib/adminAuth';
+import { requireDean } from '@/lib/adminAuth';
 
 /**
  * GET /api/admin/tally
@@ -9,7 +9,7 @@ import { requireAdmin } from '@/lib/adminAuth';
  */
 export async function GET(request) {
     try {
-        const auth = await requireAdmin();
+        const auth = await requireDean();
         if (!auth.authenticated) {
             return NextResponse.json({ error: auth.error }, { status: 401 });
         }

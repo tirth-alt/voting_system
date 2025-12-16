@@ -2,15 +2,15 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Candidate from '@/models/Candidate';
 import Vote from '@/models/Vote';
-import { requireAdmin } from '@/lib/adminAuth';
+import { requireDean } from '@/lib/adminAuth';
 
 /**
  * POST /api/admin/reset-all
- * Reset all votes and candidate counts
+ * Reset all votes and candidate counts (Dean-only - destructive action)
  */
 export async function POST(request) {
     try {
-        const auth = await requireAdmin();
+        const auth = await requireDean();
         if (!auth.authenticated) {
             return NextResponse.json({ error: auth.error }, { status: 401 });
         }
@@ -36,7 +36,8 @@ export async function POST(request) {
             total_points: 0
         });
 
-        console.log(`[ADMIN] ⚠️ ALL VOTES RESET by ${auth.session.username}. Deleted ${deleteResult.deletedCount} votes.`);
+        const identifier = auth.user?.email || auth.session?.email || 'dean';
+        console.log(`[ADMIN] ⚠️ ALL VOTES RESET by ${identifier}. Deleted ${deleteResult.deletedCount} votes.`);
 
         return NextResponse.json({
             success: true,

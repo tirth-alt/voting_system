@@ -13,19 +13,36 @@ export async function POST(request) {
             return NextResponse.json({ error: 'Email and password required' }, { status: 400 });
         }
 
-        // Get admin credentials from environment variables
-        const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
-        const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+        // Get admin credentials from environment variables and trim them
+        const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || '').trim();
+        const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || '').trim();
+
+        console.log('[ADMIN LOGIN DEBUG]');
+        console.log('Received email:', email);
+        console.log('Expected email:', ADMIN_EMAIL);
+        console.log('Email match:', email.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase());
+        console.log('Password match:', password === ADMIN_PASSWORD);
 
         if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
             console.error('ADMIN_EMAIL or ADMIN_PASSWORD not set in environment variables');
-            return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+            return NextResponse.json({ error: 'Server configuration error - Admin credentials not set' }, { status: 500 });
         }
 
-        // Simple credential check
-        if (email.toLowerCase().trim() !== ADMIN_EMAIL.toLowerCase().trim() || password !== ADMIN_PASSWORD) {
+        // Simple credential check with trimming and case-insensitive email
+        const emailMatch = email.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase();
+        const passwordMatch = password === ADMIN_PASSWORD;
+
+        if (!emailMatch || !passwordMatch) {
             console.log(`[ADMIN] Failed login attempt for: ${email}`);
-            return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+            return NextResponse.json({
+                error: 'Invalid credentials',
+                debug: {
+                    emailProvided: email,
+                    emailExpected: ADMIN_EMAIL,
+                    emailMatch,
+                    passwordMatch
+                }
+            }, { status: 401 });
         }
 
         // Create session cookie

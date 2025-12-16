@@ -1,16 +1,16 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Candidate from '@/models/Candidate';
-import { requireAdmin } from '@/lib/adminAuth';
+import { requireDean } from '@/lib/adminAuth';
 import { Parser } from 'json2csv';
 
 /**
  * GET /api/admin/export
- * Export results as CSV
+ * Export results as CSV (Dean-only)
  */
 export async function GET() {
     try {
-        const auth = await requireAdmin();
+        const auth = await requireDean();
         if (!auth.authenticated) {
             return NextResponse.json({ error: auth.error }, { status: 401 });
         }

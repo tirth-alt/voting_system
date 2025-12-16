@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import bcrypt from 'bcrypt';
 import connectDB from '@/lib/mongodb';
 import Vote from '@/models/Vote';
 import Candidate from '@/models/Candidate';
 import Config from '@/models/Config';
+import { encrypt, decryptPassword } from '@/lib/encryption';
 
 /**
  * Validate ballot structure
@@ -51,25 +51,6 @@ function validateBallot(ballot) {
 }
 
 /**
- * Compute points map for audit/logging
- */
-function computePointsMap(ballot) {
-    const pointsMap = {};
-
-    for (const [positionId, selection] of Object.entries(ballot)) {
-        if (positionId === 'campusAffairsSecretary') {
-            const id = selection.choice || selection.pref1;
-            if (id) pointsMap[id] = 1;
-        } else {
-            if (selection.pref1) pointsMap[selection.pref1] = 2;
-            if (selection.pref2) pointsMap[selection.pref2] = 1;
-        }
-    }
-
-    return pointsMap;
-}
-
-/**
  * POST /api/vote
  * Submit a vote with shared PIN verification
  */
@@ -114,15 +95,45 @@ export async function POST(request) {
             return NextResponse.json({ error: ballotValidation.error }, { status: 400 });
         }
 
-        // 5. Compute points map for audit
-        const pointsMap = computePointsMap(ballot);
+        // 5. ENCRYPTION IS MANDATORY - Check if encryption is enabled
+        if (!config.encryptionEnabled || !config.encryptedPassword) {
+            console.error('[VOTE] Voting attempted without encryption enabled');
+            return NextResponse.json({
+                error: 'Voting requires encryption to be enabled. Please contact the Dean to set up vote encryption first.'
+            }, { status: 400 });
+        }
 
-        // 6. Create Vote record
-        const newVote = new Vote({
-            house: house || 'unknown',
-            ballot,
-            points_map: pointsMap
-        });
+        // 6. Create encrypted Vote record
+        let voteData;
+        try {
+            const encryptedPasswordData = {
+                encrypted: config.encryptedPassword,
+                salt: config.encryptionPasswordSalt,
+                iv: config.encryptionPasswordIV,
+                authTag: config.encryptionPasswordAuthTag
+            };
+            const deanPassword = decryptPassword(encryptedPasswordData);
+
+            // Encrypt the ballot
+            const encryptedBallot = encrypt(ballot, deanPassword);
+
+            // SECURITY: Do NOT store any readable vote data
+            voteData = {
+                house: house || 'unknown',
+                encryptedBallot: encryptedBallot.encrypted,
+                encryptionSalt: encryptedBallot.salt,
+                encryptionIV: encryptedBallot.iv,
+                encryptionAuthTag: encryptedBallot.authTag,
+                isEncrypted: true
+            };
+
+            console.log(`[VOTE] Encrypted vote recorded for house: ${house}`);
+        } catch (err) {
+            console.error('[VOTE] Encryption failed:', err.message);
+            return NextResponse.json({ error: 'Vote encryption failed' }, { status: 500 });
+        }
+
+        const newVote = new Vote(voteData);
         await newVote.save();
 
         // 7. Update Candidate counts using bulkWrite (atomic per-operation)
@@ -169,7 +180,6 @@ export async function POST(request) {
         await Config.findOneAndUpdate(
             { isConfig: true },
             {
-                pinUsed: true,  // Mark current PIN as used
                 currentPin: newPin,  // Set new PIN
                 pinUsed: false,  // New PIN is unused
                 pinGeneratedAt: new Date()

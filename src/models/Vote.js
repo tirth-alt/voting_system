@@ -1,19 +1,32 @@
 import mongoose from 'mongoose';
 
+// All votes are encrypted - no plain ballot storage
 const voteSchema = new mongoose.Schema({
     house: {
         type: String,
         enum: ['leo', 'phoenix', 'tusker', 'kong', 'unknown'],
         required: true
     },
-    ballot: {
-        type: Object,
+    // Encrypted ballot data (mandatory)
+    encryptedBallot: {
+        type: String,
         required: true
     },
-    // Keep points_map for audit/backup purposes
-    points_map: {
-        type: Object,
+    encryptionSalt: {
+        type: String,
         required: true
+    },
+    encryptionIV: {
+        type: String,
+        required: true
+    },
+    encryptionAuthTag: {
+        type: String,
+        required: true
+    },
+    isEncrypted: {
+        type: Boolean,
+        default: true
     },
     timestamp: {
         type: Date,
