@@ -582,9 +582,9 @@ export default function AdminPage() {
                 {userRole === 'dean' && (
                     <div style={{ background: '#1a1a1a', padding: '20px', borderRadius: '12px', border: '1px solid #333' }}>
                         <h3 style={{ marginBottom: '15px', color: '#00f0ff' }}>Dean Actions</h3>
-                        <button onClick={exportResults} className="btn btn-primary" style={{ width: '100%', fontSize: '0.875rem', marginBottom: '10px' }}>
+                        {/* <button onClick={exportResults} className="btn btn-primary" style={{ width: '100%', fontSize: '0.875rem', marginBottom: '10px' }}>
                             Export Results (CSV)
-                        </button>
+                        </button> */}
                         <button onClick={() => setShowResetModal(true)} className="btn btn-primary" style={{ background: '#f93e3eff', width: '100%', fontSize: '0.875rem', marginBottom: '10px', boxShadow: 'var(--glow-red)' }}>
                             Reset Elections
                         </button>
