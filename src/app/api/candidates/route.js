@@ -15,24 +15,6 @@ const positionMeta = {
     kongCaptain: { title: 'Kong House Captain', type: 'preference', house: 'kong' }
 };
 
-// Add NOTA to each position
-function addNotaToPositions(candidates) {
-    const result = {};
-    for (const [position, candidateList] of Object.entries(candidates)) {
-        result[position] = [
-            ...candidateList,
-            {
-                id: `nota_${position}`,
-                name: 'NOTA',
-                tagline: 'None of the Above',
-                photo: null,
-                isNota: true
-            }
-        ];
-    }
-    return result;
-}
-
 // Merge captain and vice-captain candidates for each house
 function mergeCaptainCandidates(candidates) {
     const houses = ['leo', 'phoenix', 'tusker', 'kong'];
@@ -64,14 +46,12 @@ function mergeCaptainCandidates(candidates) {
 
 export async function GET() {
     try {
-        // First merge captain/vice-captain candidates
+        // Merge captain/vice-captain candidates
         const mergedCandidates = mergeCaptainCandidates(candidatesData);
-        // Then add NOTA to each position
-        const candidatesWithNota = addNotaToPositions(mergedCandidates);
 
         return NextResponse.json({
             positions: positionMeta,
-            candidates: candidatesWithNota,
+            candidates: mergedCandidates,
             positionOrder: [
                 'malePresident',
                 'femalePresident',
@@ -90,3 +70,4 @@ export async function GET() {
         return NextResponse.json({ error: 'Failed to fetch candidates' }, { status: 500 });
     }
 }
+

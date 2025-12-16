@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
@@ -31,6 +31,28 @@ export default function AdminPage() {
     const [decryptPassword, setDecryptPassword] = useState('');
     const [decryptedResults, setDecryptedResults] = useState(null);
     const [encryptionError, setEncryptionError] = useState('');
+
+    // Refs for audio notification when vote is cast (new PIN generated)
+    const previousPinRef = useRef(null);
+    const audioRef = useRef(null);
+    const lastNotificationTimeRef = useRef(0); // Debounce to prevent double plays
+
+    // Function to play notification sound with debounce
+    const playVoteNotification = () => {
+        const now = Date.now();
+        // Only play if at least 1 second has passed since last notification
+        if (now - lastNotificationTimeRef.current < 1000) {
+            return; // Skip if called too soon
+        }
+        lastNotificationTimeRef.current = now;
+
+        if (audioRef.current) {
+            audioRef.current.currentTime = 0;
+            audioRef.current.play().catch(err => {
+                console.log('Audio play failed:', err);
+            });
+        }
+    };
 
     useEffect(() => {
         setMounted(true);
@@ -99,6 +121,16 @@ export default function AdminPage() {
         try {
             const response = await fetch('/api/admin/current-pin');
             const data = await response.json();
+
+            // Check if PIN has changed (indicates a vote was cast)
+            const newPin = data.currentPin;
+            if (previousPinRef.current !== null && newPin && previousPinRef.current !== newPin) {
+                // New PIN detected - vote was cast!
+                playVoteNotification();
+            }
+
+            // Update the previous PIN reference
+            previousPinRef.current = newPin;
             setCurrentPin(data);
         } catch (err) {
             console.error('Failed to fetch current PIN:', err);
@@ -452,6 +484,9 @@ export default function AdminPage() {
 
     return (
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
+            {/* Hidden audio element for vote notification */}
+            <audio ref={audioRef} preload="auto" src="/sounds/ElevenLabs_Text_to_Speech_audio.mp3" />
+
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
                 <h1>Admin Dashboard</h1>
                 <div style={{ display: 'flex', gap: '10px' }}>
@@ -706,7 +741,6 @@ export default function AdminPage() {
                                             </td>
                                             <td style={{ padding: '12px' }}>
                                                 <div style={{ fontWeight: '500' }}>{candidate.name}</div>
-                                                {candidate.isNota && <span style={{ fontSize: '0.75rem', color: '#a0a0a0' }}>(NOTA)</span>}
                                             </td>
                                             <td style={{ padding: '12px', color: '#a0a0a0', fontSize: '0.875rem', textTransform: 'capitalize' }}>
                                                 {candidate.positionId?.replace(/([A-Z])/g, ' $1').trim()}

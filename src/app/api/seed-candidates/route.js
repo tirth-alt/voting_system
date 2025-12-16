@@ -57,20 +57,6 @@ export async function POST() {
                     total_points: 0
                 });
             }
-
-            // Add NOTA option for each position
-            allCandidates.push({
-                id: `nota_${positionId}`,
-                name: 'NOTA (None of the Above)',
-                positionId: positionId,
-                house: house,
-                tagline: 'Vote for none of the candidates',
-                photo: '',
-                isNota: true,
-                pref1_count: 0,
-                pref2_count: 0,
-                total_points: 0
-            });
         }
 
         // Insert all candidates

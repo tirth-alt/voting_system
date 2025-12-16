@@ -132,7 +132,6 @@ export default function VotingPage() {
   const handleCandidateClick = (candidateId) => {
     const positionId = positionOrder[currentPositionIndex];
     const currentSelection = ballot[positionId] || {};
-    const isNota = candidateId.startsWith('nota_');
 
     if (isSingleChoice(positionId)) {
       if (currentSelection.choice === candidateId) {
@@ -141,12 +140,6 @@ export default function VotingPage() {
         setBallot({ ...ballot, [positionId]: { choice: candidateId } });
       }
     } else {
-      // NOTA cannot be first preference
-      if (isNota && !currentSelection.pref1) {
-        setError('NOTA cannot be your first preference. Please select a candidate first.');
-        return;
-      }
-
       if (currentSelection.pref1 === candidateId) {
         setBallot({ ...ballot, [positionId]: {} });
       } else if (currentSelection.pref2 === candidateId) {
@@ -294,8 +287,7 @@ export default function VotingPage() {
               {[
                 { num: 1, title: 'Preference Voting', desc: 'Most positions require two choices. First click = Preference 1 (2 points), second click = Preference 2 (1 point).' },
                 { num: 2, title: 'Single Choice', desc: 'Campus Affairs Secretary requires only one selection (1 point).' },
-                { num: 3, title: 'NOTA Option', desc: '"None of the Above" is available for every position and counts like a regular candidate.' },
-                { num: 4, title: 'Review & Submit', desc: 'Review all your selections before final submission. You cannot change your vote after submission.' }
+                { num: 3, title: 'Review & Submit', desc: 'Review all your selections before final submission. You cannot change your vote after submission.' }
               ].map((item) => (
                 <div key={item.num} className="instruction-card">
                   <span className="instruction-num">{item.num}</span>
@@ -394,7 +386,6 @@ export default function VotingPage() {
                 const isPref1 = selection.pref1 === candidate.id;
                 const isPref2 = selection.pref2 === candidate.id;
                 const isSelected = selection.choice === candidate.id;
-                const isNota = candidate.name?.toLowerCase().includes('nota');
 
                 return (
                   <button
@@ -408,10 +399,8 @@ export default function VotingPage() {
                       </span>
                     )}
 
-                    <div className={`candidate-avatar ${isNota ? 'nota' : ''}`}>
-                      {isNota ? (
-                        <span className="nota-x">✕</span>
-                      ) : candidate.photo ? (
+                    <div className="candidate-avatar">
+                      {candidate.photo ? (
                         <Image
                           src={`/assets/candidates/${candidate.photo}`}
                           alt={candidate.name}
@@ -925,15 +914,6 @@ export default function VotingPage() {
           align-items: center;
           justify-content: center;
           overflow: hidden;
-        }
-        
-        .candidate-avatar.nota {
-          background: #1a1a1a;
-        }
-        
-        .nota-x {
-          font-size: 2rem;
-          color: #666;
         }
         
         .initials {
