@@ -127,6 +127,8 @@ export default function AdminPage() {
             if (previousPinRef.current !== null && newPin && previousPinRef.current !== newPin) {
                 // New PIN detected - vote was cast!
                 playVoteNotification();
+                // Refresh stats to show updated vote counts
+                fetchStats();
             }
 
             // Update the previous PIN reference
